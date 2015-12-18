@@ -1,5 +1,26 @@
 import sys
 
+def changePos(direction, location):
+  if direction == '<':
+    location[0] = location[0]- 1
+  elif direction == '>':
+    location[0] = location[0] + 1
+  elif direction == '^':
+    location[1] = location[1] + 1
+  elif direction == 'v':
+    location[1] = location[1] - 1
+
+  return location
+
+def deliverPackage(pos, houses):
+  cur_pos = pos[0], pos[1]
+  if cur_pos in houses:
+    houses[cur_pos] = houses[cur_pos] + 1
+  else:
+    houses[cur_pos] = 1
+
+  return houses
+
 if __name__ == '__main__':
   
   directions = ''
@@ -10,40 +31,19 @@ if __name__ == '__main__':
   else:
     directions = sys.argv[1]
 
-  cur_x = 0
-  cur_y = 0
-  repeat_houses = 0
+  santa = [0, 0]
+  robo_santa = [0, 0]
   houses = {}
 
-  # Deliver the package
-  cur_pos = cur_x, cur_y
-  if cur_pos in houses:
-    houses[cur_pos] = houses[cur_pos] + 1
-  else:
-    houses[cur_pos] = 1
+  houses = deliverPackage(santa, houses)
+  houses = deliverPackage(robo_santa, houses)
 
-  for c in directions:
-    #Move
-    if c == '<':
-      cur_x = cur_x - 1
-    elif c == '>':
-      cur_x = cur_x + 1
-    elif c == '^':
-      cur_y = cur_y + 1
-    elif c == 'v':
-      cur_y = cur_y - 1
-      
-    # Deliver the package
-    cur_pos = cur_x, cur_y
-    if cur_pos in houses:
-      houses[cur_pos] = houses[cur_pos] + 1
+  for i, c in enumerate(directions):
+    if i%2 == 1:
+      santa = changePos(c, santa)
+      houses = deliverPackage(santa, houses)
     else:
-      houses[cur_pos] = 1
-    
-
-  for house in houses.keys():
-    if houses[house] > 1:
-      repeat_houses = repeat_houses + 1
+      robo_santa = changePos(c, robo_santa)
+      houses = deliverPackage(robo_santa, houses)
 
   print('Total houses: {}'.format(len(houses)))
-  print('Repeat houses: {}'.format(repeat_houses))
