@@ -35,8 +35,4 @@ if __name__ == '__main__':
     if found_match:
       break
 
-  if len(matches) < 3:
-    print('not enough matches')
-    exit()
-
   print('matches: {}'.format(matches))
